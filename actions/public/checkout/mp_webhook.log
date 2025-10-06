@@ -1,0 +1,59 @@
+2025-08-25T14:45:34-03:00 IGNORED raw=
+2025-08-25T14:50:49-03:00 PAY id=123633365314 status=pending detail=pending_waiting_transfer ext=#256671
+2025-08-25T14:52:23-03:00 PAY id=123633365314 status=approved detail=accredited ext=#256671
+2025-08-25T14:52:23-03:00 ORDER_UPDATED id=16 aguardando->preparando
+2025-08-25T15:11:49-03:00 PAY id=123636002990 status=pending detail=pending_waiting_transfer ext=#256671
+2025-08-25T15:20:32-03:00 PAY id=123636201496 status=pending detail=pending_waiting_transfer ext=#886806
+2025-08-25T15:20:36-03:00 PAY id=123098716053 status=pending detail=pending_waiting_transfer ext=#635691
+2025-08-25T15:20:53-03:00 PAY id=123099801041 status=pending detail=pending_waiting_transfer ext=#398994
+2025-08-25T15:21:24-03:00 PAY id=123099801041 status=approved detail=accredited ext=#398994
+2025-08-25T15:21:24-03:00 ORDER_UPDATED id=19 aguardando->preparando
+2025-08-25T16:55:44-03:00 PAY id=123110139939 status=pending detail=pending_waiting_transfer ext=#346532
+2025-08-25T16:56:18-03:00 PAY id=123110139939 status=approved detail=accredited ext=#346532
+2025-08-25T16:56:18-03:00 ORDER_UPDATED id=24 aguardando->preparando
+2025-08-25T21:03:09-03:00 PAY id=123678570848 status=pending detail=pending_waiting_transfer ext=#402939
+2025-08-25T21:04:11-03:00 PAY id=123140913471 status=pending detail=pending_waiting_transfer ext=#087474
+2025-08-25T21:04:44-03:00 PAY id=123140913471 status=approved detail=accredited ext=#087474
+2025-08-25T21:04:44-03:00 ORDER_UPDATED id=26 aguardando->preparando
+2025-08-25T22:30:37-03:00 PAY id=123563527058 status=cancelled detail=expired ext=#986365
+2025-08-25T22:30:37-03:00 ORDER_NOT_FOUND code=#986365
+2025-08-25T22:30:57-03:00 PAY id=123563367070 status=cancelled detail=expired ext=#986365
+2025-08-25T22:30:57-03:00 ORDER_NOT_FOUND code=#986365
+2025-08-25T22:35:22-03:00 PAY id=123562611994 status=cancelled detail=expired ext=#705528
+2025-08-25T22:35:22-03:00 ORDER_NOT_FOUND code=#705528
+2025-08-25T22:35:39-03:00 PAY id=123027916205 status=cancelled detail=expired ext=#028703
+2025-08-25T22:35:39-03:00 ORDER_NOT_FOUND code=#028703
+2025-08-25T22:35:43-03:00 PAY id=123027916205 status=cancelled detail=expired ext=#028703
+2025-08-25T22:35:43-03:00 ORDER_NOT_FOUND code=#028703
+2025-08-25T22:35:53-03:00 PAY id=123563585130 status=cancelled detail=expired ext=#462954
+2025-08-25T22:35:53-03:00 ORDER_NOT_FOUND code=#462954
+2025-08-25T22:35:57-03:00 PAY id=123563585130 status=cancelled detail=expired ext=#462954
+2025-08-25T22:35:57-03:00 ORDER_NOT_FOUND code=#462954
+2025-08-25T22:35:58-03:00 PAY id=123562680076 status=cancelled detail=expired ext=#028703
+2025-08-25T22:35:58-03:00 ORDER_NOT_FOUND code=#028703
+2025-08-25T22:50:35-03:00 PAY id=123028912127 status=cancelled detail=expired ext=#822647
+2025-08-25T22:50:35-03:00 ORDER_NOT_FOUND code=#822647
+2025-08-25T22:50:39-03:00 PAY id=123028912127 status=cancelled detail=expired ext=#822647
+2025-08-25T22:50:39-03:00 ORDER_NOT_FOUND code=#822647
+2025-08-25T22:50:41-03:00 PAY id=123565164470 status=cancelled detail=expired ext=#822647
+2025-08-25T22:50:41-03:00 ORDER_NOT_FOUND code=#822647
+2025-08-25T22:50:43-03:00 PAY id=123028774213 status=cancelled detail=expired ext=#822647
+2025-08-25T22:50:43-03:00 ORDER_NOT_FOUND code=#822647
+2025-08-25T22:50:44-03:00 PAY id=123565164470 status=cancelled detail=expired ext=#822647
+2025-08-25T22:50:44-03:00 ORDER_NOT_FOUND code=#822647
+2025-08-26T08:55:26-03:00 PAY id=123056638391 status=cancelled detail=expired ext=#624210
+2025-08-26T08:55:26-03:00 ORDER_NOT_FOUND code=#624210
+2025-08-26T12:21:24-03:00 PAY id=123203208491 status=pending detail=pending_waiting_transfer ext=#104448
+2025-08-26T14:25:50-03:00 PAY id=123218646109 status=pending detail=pending_waiting_transfer ext=#609201
+2025-08-26T15:16:42-03:00 PAY id=123636002990 status=cancelled detail=expired ext=#256671
+2025-08-26T15:16:42-03:00 ORDER_NOT_FOUND code=#256671
+2025-08-26T15:26:41-03:00 PAY id=123636201496 status=cancelled detail=expired ext=#886806
+2025-08-26T15:26:41-03:00 ORDER_NOT_FOUND code=#886806
+2025-08-26T15:26:51-03:00 PAY id=123098716053 status=cancelled detail=expired ext=#635691
+2025-08-26T15:26:51-03:00 ORDER_NOT_FOUND code=#635691
+2025-08-26T21:07:29-03:00 PAY id=123678570848 status=cancelled detail=expired ext=#402939
+2025-08-26T21:07:29-03:00 ORDER_UPDATED id=25 aguardando->cancelado
+2025-08-27T12:25:25-03:00 PAY id=123203208491 status=cancelled detail=expired ext=#104448
+2025-08-27T12:25:25-03:00 ORDER_UPDATED id=27 aguardando->cancelado
+2025-08-27T14:32:17-03:00 PAY id=123218646109 status=cancelled detail=expired ext=#609201
+2025-08-27T14:32:17-03:00 ORDER_UPDATED id=28 aguardando->cancelado

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BurgerHub • Cozinha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../cozinha/cozinha.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-wrap">
+      <div class="brand"><i class="fa-solid fa-burger"></i> BurgerHub • <span>Cozinha</span></div>
+      <div class="clock" id="clock"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section aria-labelledby="sec-active">
+      <div class="section-head">
+        <h1 id="sec-active">Pedidos em andamento</h1>
+        <div class="legend">
+          <span class="pill pill-wait">Aguardando</span>
+          <span class="pill pill-prep">Preparando</span>
+          <span class="pill pill-done">Finalizado</span>
+        </div>
+      </div>
+      <div id="activeGrid" class="grid"></div>
+      <div id="emptyActive" class="empty" hidden>
+        <i class="fa-solid fa-utensils"></i>
+        <p>Sem pedidos no momento.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="sec-history">
+      <div class="section-head">
+        <h2 id="sec-history">Histórico (últimas 24h)</h2>
+      </div>
+      <div id="historyList" class="history"></div>
+      <div id="emptyHistory" class="empty" hidden>
+        <i class="fa-regular fa-clock"></i>
+        <p>Nenhum pedido finalizado nas últimas 24 horas.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="confirmModal" aria-hidden="true" role="dialog" aria-labelledby="confirmTitle" aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="confirmTitle">Deseja finalizar este pedido?</h3>
+        <button class="icon-btn" id="closeConfirm" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmText">Pedido #000000 será movido para o histórico.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="cancelConfirm"><i class="fa-regular fa-circle-xmark"></i> Cancelar</button>
+        <button class="btn btn-primary" id="okConfirm"><i class="fa-solid fa-check"></i> Finalizar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container foot">
+      <small>&copy; <span id="year"></span> BurgerHub</small>
+      <small class="muted">Atualiza automaticamente quando um novo pedido é criado.</small>
+    </div>
+  </footer>
+
+  <!-- Na cozinha.html -->
+<script src="../cozinha/cozinha.js" defer></script>
+<script>
+  (function () {
+    const s = document.createElement('script');
+    // muda o caminho conforme sua estrutura
+    s.src = '../cozinha/cozinha.js?ts=' + Date.now() + '&r=' + Math.random().toString(36).slice(2);
+    s.defer = true;
+    document.head.appendChild(s);
+  })();
+</script>
+</body>
+</html>

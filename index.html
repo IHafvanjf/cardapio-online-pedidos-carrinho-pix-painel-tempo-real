@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BurgerHub • Cardápio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body data-page="dashboard">
+  <header class="site-header">
+    <div class="container header-wrap">
+      <a class="brand" href="#"><i class="fa-solid fa-burger"></i> BurgerHub</a>
+      <div class="header-actions">
+        <div class="lang-switch">
+          <i class="fa-solid fa-globe"></i>
+          <select id="langSelect" aria-label="Idioma">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+        <button id="openCart" class="icon-btn" aria-label="Abrir nota">
+          <i class="fa-solid fa-receipt"></i>
+          <span id="cartCount" class="badge">0</span>
+        </button>
+      </div>
+    </div>
+    <nav class="tabs container" role="tablist">
+      <button class="tab active" data-cat="burgers" role="tab" aria-selected="true" data-i18n="tab_burgers">Hambúrgueres</button>
+      <button class="tab" data-cat="combos" role="tab" data-i18n="tab_combos">Combos</button>
+      <button class="tab" data-cat="drinks" role="tab" data-i18n="tab_drinks">Bebidas</button>
+      <button class="tab" data-cat="desserts" role="tab" data-i18n="tab_desserts">Sobremesas</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="catalog" class="grid"></section>
+  </main>
+
+  <!-- Nota / Carrinho -->
+  <aside id="cartDrawer" class="cart-drawer" aria-labelledby="openCart" aria-hidden="true">
+    <div class="cart-header">
+      <h3 data-i18n="your_ticket">Sua Nota</h3>
+      <button id="closeCart" class="icon-btn" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="totals">
+        <div><span data-i18n="subtotal">Subtotal</span><strong id="subtotal">R$ 0,00</strong></div>
+        <div><span data-i18n="prep_time">Tempo total</span><strong id="totalTime">0 min</strong></div>
+      </div>
+      <button id="goCheckout" class="btn btn-primary btn-lg"><i class="fa-solid fa-check"></i> <span data-i18n="finish_order">Finalizar Pedido</span></button>
+    </div>
+  </aside>
+
+  <!-- Modal do Item -->
+  <div id="itemModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalTitle">Item</h3>
+        <button class="icon-btn" id="closeItemModal" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p id="modalDesc" class="muted"></p>
+        <div class="pill-row">
+          <span class="pill"><i class="fa-regular fa-clock"></i> <span id="modalPrep">10</span> <span data-i18n="min">min</span></span>
+          <span class="pill price" id="modalPrice">R$ 0,00</span>
+        </div>
+        <div id="extrasWrap" class="extras"></div>
+        <label class="field">
+          <span data-i18n="remove_something">Algo para remover?</span>
+          <input id="removeNotes" type="text" placeholder="ex: sem cebola, sem picles"/>
+        </label>
+        <div class="qty-row">
+          <button class="qty-btn" id="qtyMinus" aria-label="Diminuir"><i class="fa-solid fa-minus"></i></button>
+          <span id="qtyValue" class="qty">1</span>
+          <button class="qty-btn" id="qtyPlus" aria-label="Aumentar"><i class="fa-solid fa-plus"></i></button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="addToCart" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i> <span data-i18n="add_to_order">Adicionar à nota</span></button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer container">
+    <small>© <span id="year"></span> BurgerHub — <span data-i18n="footer_all_rights">todos os direitos reservados</span></small>
+  </footer>
+
+  <script src="./assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BurgerHub • Status do Pedido</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body data-page="status">
+  <header class="site-header">
+    <div class="container header-wrap">
+      <a class="brand" href="../dashboard.html"><i class="fa-solid fa-burger"></i> BurgerHub</a>
+      <div class="lang-switch">
+        <i class="fa-solid fa-globe"></i>
+        <select id="langSelect" aria-label="Idioma">
+          <option value="pt">Português</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="container narrow">
+    <h1 data-i18n="order_status">Status do pedido</h1>
+    <div id="orderHead" class="order-head">
+      <div><span data-i18n="order_code">Pedido</span> <strong id="orderCode">#0000</strong></div>
+      <div class="status-pill" id="orderState">Preparando</div>
+    </div>
+
+    <section id="statusList" class="card list"></section>
+
+    <div class="actions">
+      <a class="btn" href="../index.html"><i class="fa-solid fa-rotate-left"></i> <span data-i18n="make_new_order">Fazer novo pedido</span></a>
+    </div>
+  </main>
+
+    <script src="../assets/js/app.js" defer></script>
+</body>
+</html>

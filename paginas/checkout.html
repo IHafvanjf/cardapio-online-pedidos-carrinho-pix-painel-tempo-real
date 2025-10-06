@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BurgerHub • Checkout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body data-page="checkout">
+  <header class="site-header">
+    <div class="container header-wrap">
+      <a class="brand" href="../index.html"><i class="fa-solid fa-burger"></i> BurgerHub</a>
+      <div class="lang-switch">
+        <i class="fa-solid fa-globe"></i>
+        <select id="langSelect" aria-label="Idioma">
+          <option value="pt">Português</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="container narrow">
+    <h1 data-i18n="checkout_title">Checkout</h1>
+
+    <section class="card">
+      <h2 data-i18n="order_summary">Resumo do pedido</h2>
+      <div id="summaryList" class="summary-list"></div>
+      <div class="summary-totals">
+        <div><span data-i18n="subtotal">Subtotal</span><strong id="sumSubtotal">R$ 0,00</strong></div>
+        <div><span data-i18n="prep_time">Tempo total</span><strong id="sumTime">0 min</strong></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="choose_payment">Escolha o pagamento</h2>
+
+      <div class="pay-methods">
+        <label class="radio">
+          <input type="radio" name="pay" value="card" checked>
+          <span><i class="fa-regular fa-credit-card"></i> <span data-i18n="pay_card">Cartão</span></span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="pay" value="pix">
+          <span><i class="fa-solid fa-qrcode"></i> PIX</span>
+        </label>
+      </div>
+
+      <!-- Removido o form de cartão. Fica só o radio. -->
+
+      <div id="payPix" class="pay-box" hidden>
+        <div class="pix-cta">
+          <div class="qr-card" aria-label="QR Code PIX">
+            <i class="fa-solid fa-qrcode"></i>
+          </div>
+
+          <button id="copyPix" class="btn" 
+                  data-code="00020126360014BR.GOV.BCB.PIX0114exemplo@pix.com52040000530398654041.005802BR5912BurgerHub LTDA6009SaoPaulo62070503***6304ABCD">
+            <i class="fa-regular fa-copy"></i> Copiar código PIX
+          </button>
+
+          <textarea id="pixHiddenCode" class="visually-hidden" readonly>
+      00020126360014BR.GOV.BCB.PIX0114exemplo@pix.com52040000530398654041.005802BR5912BurgerHub LTDA6009SaoPaulo62070503***6304ABCD
+          </textarea>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <a class="btn" href="../index.html"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_to_menu">Voltar ao menu</span></a>
+      <button id="confirmPayment" class="btn btn-primary btn-lg"><i class="fa-solid fa-shield-check"></i> <span data-i18n="confirm_and_pay">Confirmar e pagar</span></button>
+    </div>
+  </main>
+
+  <script src="../assets/js/app.js" defer></script>
+  <script>
+(() => {
+  if (document.body.dataset.page !== 'checkout') return;
+
+  // Evita que listeners antigos do app.js interfiram
+  window.__newCheckout = true;
+
+  const API = '../actions/public/checkout';
+  const sel = (s, el=document) => el.querySelector(s);
+
+  // ===== Helpers =====
+  const brl = v => (v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  async function apiPost(path, payload){
+    const r = await fetch(`${API}/${path}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload||{})
+    });
+    let data = {};
+    try { data = await r.json(); } catch {}
+    if (!r.ok) {
+      const msg = data?.error || data?.message || `Erro ${r.status}`;
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  // Carrinho
+  function readCart(){
+    const raw = localStorage.getItem('bh_cart') || localStorage.getItem('cart') || '[]';
+    try { return JSON.parse(raw); } catch { return []; }
+  }
+
+  // Normaliza para a API: product_id e extras como IDs
+  function normalizeCartForApi(raw) {
+    return (raw || []).map(it => ({
+      product_id: Number(it.product_id || it.id || (it.product && it.product.id) || 0),
+      qty: Number(it.qty || 1),
+      extras: (it.extras || []).map(e => Number((e && (e.extra_id || e.id || e.k)) ?? e)).filter(Number.isFinite)
+    })).filter(x => x.product_id > 0);
+  }
+
+  // ===== Estado do checkout =====
+  const state = {
+    itemsRaw: [],     // como está no localStorage
+    items: [],        // normalizado p/ API
+    order: null,      // {order_id, code, status, total}
+    pix: null         // {copy_paste, qr_code_base64}
+  };
+
+  // Resumo com base no pricing do servidor
+  async function loadPricing(){
+    state.itemsRaw = readCart();
+    const items = normalizeCartForApi(state.itemsRaw);
+
+    if (!items.length) {
+      // carrinho vazio → mostra vazio e sai
+      const list = sel('#summaryList'); if (list) list.innerHTML = '';
+      sel('#sumSubtotal') && (sel('#sumSubtotal').textContent = brl(0));
+      sel('#sumTime') && (sel('#sumTime').textContent = '0 min');
+      return;
+    }
+
+    try {
+      const data = await apiPost('pricing.php', { items });
+      state.items = items;
+
+      const list = sel('#summaryList');
+      if (list) {
+        list.innerHTML = '';
+        data.items.forEach(it => {
+          const li = document.createElement('div');
+          li.className = 'sum-row';
+          const ex = (it.extras||[]).map(e=>e.name).join(', ');
+          li.innerHTML = `
+            <div>${it.qty}× ${it.name} ${ex?`<span class="meta">(${ex})</span>`:''}</div>
+            <div><strong>${brl(it.item_total)}</strong></div>`;
+          list.appendChild(li);
+        });
+      }
+      sel('#sumSubtotal') && (sel('#sumSubtotal').textContent = brl(data.totals.total));
+      sel('#sumTime') && (sel('#sumTime').textContent = `${data.eta_min} min`);
+    } catch (err){
+      // Se item não disponível, limpe carrinho para evitar loop
+      if ((err.message||'').includes('PRODUCT_NOT_AVAILABLE')) {
+        alert('Algum item ficou indisponível. Volte ao menu e refaça o pedido.');
+        localStorage.removeItem('bh_cart');
+      } else {
+        alert(`Erro ao calcular total: ${err.message||err}`);
+      }
+      // zera UI
+      const list = sel('#summaryList'); if (list) list.innerHTML = '';
+      sel('#sumSubtotal') && (sel('#sumSubtotal').textContent = brl(0));
+      sel('#sumTime') && (sel('#sumTime').textContent = '0 min');
+      throw err;
+    }
+  }
+
+  // Cria pedido uma única vez (status 'aguardando')
+  async function ensureOrder(){
+    if (state.order) return state.order;
+    const items = state.items.length ? state.items : normalizeCartForApi(readCart());
+    if (!items.length) throw new Error('Carrinho vazio');
+
+    const data = await apiPost('create_order.php', { items, customer: {} });
+    state.order = data; // {order_id, code, status, total, currency}
+    return state.order;
+  }
+
+  // Gera PIX e preenche UI
+  async function makePix(){
+    const { order_id } = await ensureOrder();
+    const pix = await apiPost('pay_pix.php', { order_id });
+    state.pix = pix.pix;
+
+    // Mostra o box PIX
+    const box = sel('#payPix'); if (box) box.hidden = false;
+
+    // QR
+    const qrWrap = sel('#payPix .qr-card');
+    if (qrWrap) {
+      if (state.pix.qr_code_base64) {
+        qrWrap.innerHTML = `<img alt="QR Code PIX" style="width:100%;height:100%;object-fit:contain"
+          src="data:image/png;base64,${state.pix.qr_code_base64}">`;
+      } else {
+        qrWrap.innerHTML = `<i class="fa-solid fa-qrcode"></i>`;
+      }
+    }
+
+    // Botão copiar
+    const btnCopy = sel('#copyPix');
+    const hidden = sel('#pixHiddenCode');
+    if (btnCopy) {
+      btnCopy.dataset.code = state.pix.copy_paste;
+      btnCopy.disabled = false;
+      btnCopy.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(state.pix.copy_paste);
+          btnCopy.innerHTML = `<i class="fa-regular fa-copy"></i> Copiado!`;
+          setTimeout(()=> btnCopy.innerHTML = `<i class="fa-regular fa-copy"></i> Copiar código PIX`, 1200);
+        } catch {
+          if (hidden) { hidden.value = state.pix.copy_paste; hidden.select(); document.execCommand('copy'); }
+        }
+      };
+      if (hidden) hidden.value = state.pix.copy_paste;
+    }
+  }
+
+  // Ao escolher PIX, já cria pedido e busca QR
+  function bindPaymentRadios(){
+    const radios = document.querySelectorAll('input[name="pay"]');
+    radios.forEach(r=>{
+      r.addEventListener('change', async (e)=>{
+        const v = e.target.value;
+        if (v === 'pix' && e.target.checked) {
+          try {
+            await makePix();
+          } catch (err) {
+            alert(`Erro ao gerar PIX: ${err.message||err}`);
+          }
+        } else {
+          const box = sel('#payPix'); if (box) box.hidden = true;
+        }
+      });
+    });
+    // se já vier "pix" selecionado por algum motivo
+    const checked = document.querySelector('input[name="pay"]:checked');
+    if (checked && checked.value === 'pix') {
+      makePix().catch(()=>{});
+    }
+  }
+
+  // Botão “Confirmar e pagar” — intercepta para não disparar placeOrder()
+  function bindConfirm(){
+    const btn = sel('#confirmPayment');
+    if (!btn) return;
+    btn.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      e.stopImmediatePropagation(); // impede listener antigo
+      const pay = document.querySelector('input[name="pay"]:checked')?.value || 'card';
+      if (pay === 'pix') {
+        try { await makePix(); } catch(err){ alert(err.message||'Erro ao gerar PIX'); }
+      } else {
+        alert('Pagamento por cartão será habilitado em seguida.');
+      }
+    }, true); // captura para bloquear ouvintes antigos
+  }
+
+  // init
+  (async function init(){
+    await loadPricing();     // preenche resumo com base no servidor
+    bindPaymentRadios();     // selecionar PIX mostra QR
+    bindConfirm();           // botão com proteção
+  })();
+})();
+</script>
+
+</body>
+</html>
