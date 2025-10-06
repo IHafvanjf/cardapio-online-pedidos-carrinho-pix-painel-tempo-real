@@ -1,5 +1,7 @@
 # Cardápio Online — Pedidos com Carrinho e PIX + Painel em Tempo Real
 
+**Última revisão:** 09-2025
+
 Plataforma de delivery para hamburguerias com **cardápio interativo**, **carrinho**, **checkout via PIX** (QR + copiar/colar) e **painel de controle em tempo real** para cozinha/atendimento. Foco em UX rápida, mobile-first e operação simples.
 
 ---
