@@ -4,10 +4,6 @@ $CONFIG = [
   'db' => [
     'host'    => '127.0.0.1',
     'port'    => '3306',
-    'name'    => 'u953537988_cardapio',
-    'user'    => 'u953537988_cardapio',
-    'pass'    => '13579012Victor)',
-    'charset' => 'utf8mb4',
   ],
   'security' => [
     'csrf_key' => '123',
@@ -29,3 +25,4 @@ if (!defined('MP_ENV'))          define('MP_ENV',          $CONFIG['mp']['env'])
 date_default_timezone_set('America/Sao_Paulo');
 
 return $CONFIG;
+
